@@ -1,0 +1,28 @@
+{
+  "name": "EasyNavigationBar",
+  "version": "0.1.0",
+  "summary": "A short description of EasyNavigationBar.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/iya/EasyNavigationBar",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "iya": "mrzhwayne@163.com"
+  },
+  "source": {
+    "git": "https://github.com/iya/EasyNavigationBar.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "EasyNavigationBar/Classes/**/*",
+  "public_header_files": "EasyNavigationBar/Classes/Public/**/*.h",
+  "dependencies": {
+    "Masonry": [
+
+    ]
+  }
+}

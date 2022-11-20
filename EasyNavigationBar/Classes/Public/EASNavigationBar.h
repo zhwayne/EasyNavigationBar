@@ -21,16 +21,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// 导航栏的附着视图，设置 attachedView 后，导航栏视图中原有的子视图会被替换
 @property (nonatomic, nullable) UIView *attachedView;
 
-@property (nonatomic, nullable) UIColor *barTintColor;
+@property (nonatomic, nullable) UIColor *barTintColor UI_APPEARANCE_SELECTOR;
 
 /// 当前导航栏是否是半透明的。当设置为 true，导航栏会有磨砂玻璃效果。
-@property (nonatomic, getter=isTranslucent) BOOL translucent;
+@property (nonatomic, getter=isTranslucent) BOOL translucent UI_APPEARANCE_SELECTOR;
 
 /// 允许导航栏被覆盖。实现效果不理想，暂不开放接口。
 @property (nonatomic, getter=isAllowCovered) BOOL allowCovered NS_UNAVAILABLE;
 
 /// 显示 shadow，当不需要显示导航栏下方的分割线时，将其置空即可。
-@property (nonatomic, nullable) UIImage *shadowImage;
+@property (nonatomic, nullable) UIImage *shadowImage UI_APPEARANCE_SELECTOR;
 
 @end
 

@@ -42,10 +42,7 @@
     self.topBarItem.leftBarButtonItem = leftItem;
     self.topBarItem.rightBarButtonItem = pushItem;
     self.topBarItem.title = @"EASNavigationBar";
-//    self.topBarItem.titleColor = [UIColor whiteColor];
-//    self.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationBar.translucent = YES;
-//    self.navigationBar.barTintColor = [UIColor systemTealColor];
+    self.topBarItem.titleColor = [UIColor whiteColor];
 #else
     self.navigationItem.title = @"UINavigatioBar";
     self.navigationController.navigationBar.barTintColor = [UIColor systemTealColor];

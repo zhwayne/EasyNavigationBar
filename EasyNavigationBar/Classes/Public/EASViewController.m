@@ -27,6 +27,7 @@
 #if DEBUG
 - (void)dealloc
 {
+    [UINavigationBar appearance];
     NSLog(@"-[%@ dealloc]", [self class]);
 }
 #endif

@@ -12,13 +12,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EASNavigationBarItem : NSObject
+@interface EASNavigationBarItem : NSObject <UIAppearance>
 
 /// 当前导航栏的标题
 @property (nonatomic, copy, nullable) NSString *title;
 
 /// 导航栏标题文字的颜色
-@property (nonatomic, null_resettable) UIColor *titleColor;
+@property (nonatomic, null_resettable) UIColor *titleColor UI_APPEARANCE_SELECTOR;
 
 /// 导航栏的标题视图。设置 titleView 后，原本的 title 会被替换！
 /// FIXME: titleView 目前还不支持使用 Masonry 设置约束以及设定 frame, 请谨慎使用。

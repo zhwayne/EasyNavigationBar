@@ -28,7 +28,9 @@
 + (void)initialize
 {
     if (self == [EASNavigationBar class]) {
-        [[EASNavigationBar appearance] setTintColor:[UIColor colorWithRed:0.28 green:0.28 blue:0.29 alpha:1.00]];
+        [EASNavigationBar appearance].tintColor = [UIColor colorWithRed:0.28 green:0.28 blue:0.29 alpha:1.00];
+        [EASNavigationBar appearance].barTintColor = [UIColor whiteColor];
+        [EASNavigationBar appearance].translucent = YES;
     }
 }
 
@@ -38,7 +40,6 @@
     
 }
 #endif
-
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -68,9 +69,10 @@
         _barItem = [[EASNavigationBarItem alloc] init];
         _barItem.associatedContentView = _contentView;
 
-        [self setShadowImage:_EASBarBackgroundShadowView.defaultShadowImage];
-        [self setTranslucent:NO];
-        self.barTintColor = [UIColor whiteColor];
+        
+//        [self setShadowImage:_EASBarBackgroundShadowView.defaultShadowImage];
+//        [self setTranslucent:NO];
+//        self.barTintColor = [UIColor whiteColor];
     }
     return self;
 }

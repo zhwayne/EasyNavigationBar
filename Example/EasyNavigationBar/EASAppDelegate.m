@@ -7,12 +7,16 @@
 //
 
 #import "EASAppDelegate.h"
+@import EasyNavigationBar;
 
 @implementation EASAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [EASNavigationBar appearance].tintColor = [UIColor whiteColor];
+    [EASNavigationBar appearance].translucent = YES;
+    [EASNavigationBar appearance].barTintColor = [UIColor systemTealColor];
     return YES;
 }
 

@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIScrollView (EasyNavigationBar)
 
-+ (void)swizzingAdjustedContentInset;
-
 @end
 
 NS_ASSUME_NONNULL_END

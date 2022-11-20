@@ -12,6 +12,7 @@
 #import "UIScrollView+EasyNavigationBar.h"
 #import "NSArray+EASBlock.h"
 #import <objc/runtime.h>
+#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
 
 @interface EASViewController () <UIGestureRecognizerDelegate>
 
@@ -30,6 +31,10 @@
 }
 #endif
 
+- (BOOL)fd_prefersNavigationBarHidden {
+    return YES;
+}
+
 - (EASNavigationBar *)navigationBar {
     EASNavigationBar *bar = objc_getAssociatedObject(self, _cmd);
     if (bar == nil) {
@@ -40,7 +45,7 @@
     return bar;
 }
 
-- (EASNavigationBarItem *)ez_navigationItem {
+- (EASNavigationBarItem *)topBarItem {
     return self.navigationBar.barItem;
 }
 
@@ -48,10 +53,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationController.interactivePopGestureRecognizer setEnabled:YES];
     [self.view addSubview:self.navigationBar];
-    self.navigationBar.barItem.title = (self.title ?: self.ez_navigationItem.title) ?: self.ez_navigationItem.title;
-    [UIScrollView swizzingAdjustedContentInset];
+    if (self.navigationBar.barItem.title == nil) {
+        self.navigationBar.barItem.title = self.title ?: self.navigationItem.title;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -66,7 +71,7 @@
 
 - (void)setTitle:(NSString *)title {
     [super setTitle:title];
-    self.ez_navigationItem.title = title;
+    self.navigationBar.barItem.title = title;
 }
 
 - (void)viewDidLayoutSubviews {

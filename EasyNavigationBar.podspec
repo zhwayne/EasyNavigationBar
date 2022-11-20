@@ -39,4 +39,5 @@ TODO: Add long description of the pod here.
   s.public_header_files = 'EasyNavigationBar/Classes/Public/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Masonry'
+  s.dependency 'FDFullscreenPopGesture'
 end

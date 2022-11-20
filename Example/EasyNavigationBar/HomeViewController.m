@@ -25,7 +25,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.datas = [NSMutableArray array];
-    for (int i = 0; i < 30; ++i) {
+    for (int i = 0; i < 100; ++i) {
         [self.datas addObject:@(i)];
     }
     
@@ -39,10 +39,10 @@
         HomeViewController *viewController = [[HomeViewController alloc] init];
         [weakSelf.navigationController pushViewController:viewController animated:YES];
     }];
-    self.ez_navigationItem.leftBarButtonItem = leftItem;
-    self.ez_navigationItem.rightBarButtonItem = pushItem;
-    self.ez_navigationItem.title = @"EASNavigationBar";
-//    self.ez_navigationItem.titleColor = [UIColor whiteColor];
+    self.topBarItem.leftBarButtonItem = leftItem;
+    self.topBarItem.rightBarButtonItem = pushItem;
+    self.topBarItem.title = @"EASNavigationBar";
+//    self.topBarItem.titleColor = [UIColor whiteColor];
 //    self.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationBar.translucent = YES;
 //    self.navigationBar.barTintColor = [UIColor systemTealColor];
@@ -75,6 +75,10 @@
         UIColor.orangeColor, UIColor.greenColor, UIColor.yellowColor
     ][arc4random() % 3];
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 44;
 }
 
 @end

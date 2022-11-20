@@ -9,17 +9,17 @@
 #import "UIScrollView+EasyNavigationBar.h"
 #import "EASViewController.h"
 #import "UIView+EasyNavigationBar.h"
-
 #import "_EASMethodSwizzle.h"
 
 @implementation UIScrollView (EasyNavigationBar)
 
-+ (void)swizzingAdjustedContentInset {
++ (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (@available(iOS 11.0, *)) {
+            SEL selector = NSSelectorFromString(@"setSafeAreaInsets:");
             [_EASMethodSwizzle swizzleInstanceMethod:UIScrollView.class
-                                    originalSelector:@selector(setSafeAreaInsets:)
+                                    originalSelector:selector
                                     swizzledSelector:@selector(eas_setSafeAreaInsets:)];
         }
     });

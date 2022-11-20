@@ -16,19 +16,32 @@
 
 @property (nonatomic) NSMutableArray *datas;
 
+@property (nonatomic) UIStatusBarStyle statusBarStyle;
+
 @end
 
 @implementation HomeViewController
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return self.statusBarStyle;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle {
+    _statusBarStyle = statusBarStyle;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.statusBarStyle = UIStatusBarStyleLightContent;
+    
     self.datas = [NSMutableArray array];
     for (int i = 0; i < 100; ++i) {
         [self.datas addObject:@(i)];
     }
-    
+
 #ifdef USE_EAS_NAVIGATIOB_BAR
     EASBarButtonItem *leftItem = [[EASBarButtonItem alloc] initWithTitle:@"copy" action:^(EASBarButtonItem * _Nonnull item) {
         
@@ -76,6 +89,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 44;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentOffset.y > 300) {
+        if (self.isNavigationBarHidden == NO) {
+            [self setNavigationBarHidden:YES animated:YES];
+            self.statusBarStyle = UIStatusBarStyleDarkContent;
+        }
+    } else {
+        if (self.isNavigationBarHidden == YES) {
+            [self setNavigationBarHidden:NO animated:YES];
+            self.statusBarStyle = UIStatusBarStyleLightContent;
+        }
+    }
 }
 
 @end

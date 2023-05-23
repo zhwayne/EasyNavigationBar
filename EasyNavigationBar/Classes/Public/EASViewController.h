@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 当前 view controller 的导航栏视图。
 @property (nonatomic, readonly) EASNavigationBar *navigationBar;
 
-@property (nonatomic, readonly) EASNavigationBarItem *topBarItem;
-
 @property (nonatomic, readonly) BOOL isNavigationBarHidden;
 
 - (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated;

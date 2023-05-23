@@ -213,7 +213,7 @@
         return;
     }
     if (viewController.presentingViewController) {
-        [viewController dismissViewControllerAnimated:YES completion:nil];
+        [viewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         return;
     }
 }

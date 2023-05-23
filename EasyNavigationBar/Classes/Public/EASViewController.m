@@ -39,15 +39,10 @@
 - (EASNavigationBar *)navigationBar {
     EASNavigationBar *bar = objc_getAssociatedObject(self, _cmd);
     if (bar == nil) {
-        CGFloat width = [UIScreen mainScreen].bounds.size.width;
-        bar = [[EASNavigationBar alloc] initWithFrame:CGRectMake(0, 0, width, 44)];
+        bar = [[EASNavigationBar alloc] initWithFrame:CGRectZero];
         objc_setAssociatedObject(self, _cmd, bar, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return bar;
-}
-
-- (EASNavigationBarItem *)topBarItem {
-    return self.navigationBar.barItem;
 }
 
 - (void)viewDidLoad {
@@ -119,29 +114,51 @@
     
     [self.view layoutIfNeeded];
     
-    NSTimeInterval duration = animated ? 0.25 : 0;
     if (hidden) {
         CGFloat offset = CGRectGetMaxY(self.navigationBar.frame);
-        [UIView animateWithDuration:duration animations:^{
+        void (^animations)(void) = ^{
             CGRect frame = self.navigationBar.frame;
             frame.origin.y -= offset;
             self.navigationBar.frame = frame;
             [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
+        };
+        void (^completion)(void) = ^{
             self.navigationBar.hidden = self.isNavigationBarHidden;
             [self.navigationBar removeFromSuperview];
-        }];
+        };
+        if (animated) {
+            UISpringTimingParameters *parameters = [[UISpringTimingParameters alloc] init];
+            UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:1.0 timingParameters:parameters];
+            [animator addAnimations:animations];
+            [animator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+                completion();
+            }];
+            [animator startAnimation];
+        } else {
+            [UIView performWithoutAnimation:animations];
+            completion();
+        }
     } else {
         CGFloat y = 20;
         [self.view addSubview:self.navigationBar];
         if (@available(iOS 11.0, *)) { y = super.view.safeAreaInsets.top; }
         self.navigationBar.hidden = self.isNavigationBarHidden;
-        [UIView animateWithDuration:duration animations:^{
+        
+        void (^animations)(void) = ^{
             CGRect frame = self.navigationBar.frame;
             frame.origin.y = y;
             self.navigationBar.frame = frame;
             [self.view layoutIfNeeded];
-        }];
+        };
+        
+        if (animated) {
+            UISpringTimingParameters *parameters = [[UISpringTimingParameters alloc] init];
+            UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:1.0 timingParameters:parameters];
+            [animator addAnimations:animations];
+            [animator startAnimation];
+        } else {
+            [UIView performWithoutAnimation:animations];
+        }
     }
 }
 

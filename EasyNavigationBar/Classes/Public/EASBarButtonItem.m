@@ -103,4 +103,14 @@
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor {
+    _tintColor = tintColor;
+    if (_customView) {
+        _customView.tintColor = tintColor;
+    }
+    if (_button) {
+        _button.tintColor = tintColor;
+    }
+}
+
 @end

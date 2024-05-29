@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable) SEL action;
 
+@property (nonatomic, nullable) UIColor *tintColor;
+
 - (instancetype)initWithTitle:(NSString *)title action:(void (^)(EASBarButtonItem *item))action;
 
 - (instancetype)initWithTitle:(NSString *)title target:(nullable id)target action:(nullable SEL)action;

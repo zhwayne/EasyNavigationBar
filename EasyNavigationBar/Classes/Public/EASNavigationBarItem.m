@@ -120,6 +120,7 @@
     }
     
     _leftBarButtonItems = [[NSOrderedSet orderedSetWithArray:leftBarButtonItems] array];
+    _leftBarButtonItem = _leftBarButtonItems.firstObject;
     
     NSMutableArray *leftViews = [NSMutableArray arrayWithCapacity:_leftBarButtonItems.count];
     [_leftBarButtonItems enumerateObjectsUsingBlock:^(EASBarButtonItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -156,6 +157,8 @@
     }
     
     _rightBarButtonItems = [[NSOrderedSet orderedSetWithArray:rightBarButtonItems] array];
+    _rightBarButtonItem = _rightBarButtonItems.lastObject;
+    
     NSMutableArray *rightViews = [NSMutableArray arrayWithCapacity:_leftBarButtonItems.count];
     [_rightBarButtonItems enumerateObjectsUsingBlock:^(EASBarButtonItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
         UIView *view = item.customView ?: item.button;

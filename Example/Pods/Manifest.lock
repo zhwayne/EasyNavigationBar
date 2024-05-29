@@ -1,11 +1,11 @@
 PODS:
-  - EasyNavigationBar (0.1.0):
+  - EasyNavigationBar (0.1.1):
     - FDFullscreenPopGesture
     - Masonry
   - FDFullscreenPopGesture (1.1)
-  - LookinServer (1.1.1):
-    - LookinServer/Core (= 1.1.1)
-  - LookinServer/Core (1.1.1)
+  - LookinServer (1.2.8):
+    - LookinServer/Core (= 1.2.8)
+  - LookinServer/Core (1.2.8)
   - Masonry (1.1.0)
 
 DEPENDENCIES:
@@ -23,11 +23,11 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  EasyNavigationBar: 4b12a8a693c518dcd27703ecc787a772d549d80c
+  EasyNavigationBar: 9354d6f2725efdb0edd53117f30e93a26affa3f8
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
-  LookinServer: 21ed9135f3a098eee84836067c4708b01b1609d7
+  LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: 30f822ba70366bebde6fa4afa0a7bca37bf59273
+PODFILE CHECKSUM: 48c0c3c7ef64d1d4a77b53b773289eb6b8d1f1a2
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2

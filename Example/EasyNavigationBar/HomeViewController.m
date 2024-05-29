@@ -52,6 +52,7 @@
         HomeViewController *viewController = [[HomeViewController alloc] init];
         [weakSelf.navigationController pushViewController:viewController animated:YES];
     }];
+    pushItem.tintColor = UIColor.systemIndigoColor;
     self.navigationBar.barItem.leftBarButtonItem = leftItem;
     self.navigationBar.barItem.rightBarButtonItem = pushItem;
     self.navigationBar.barItem.title = @"EASNavigationBar";

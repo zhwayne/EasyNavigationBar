@@ -13,143 +13,45 @@
 #import "LookinAttributesGroup.h"
 #import "LookinDisplayItem.h"
 #import "LookinAppInfo.h"
-
 #import "NSArray+Lookin.h"
+#import "NSString+Lookin.h"
 
 #if TARGET_OS_IPHONE
 #import "LKS_HierarchyDisplayItemsMaker.h"
+#import "LKSConfigManager.h"
+#import "LKS_CustomAttrSetterManager.h"
 #endif
 
 @implementation LookinHierarchyInfo
 
 #if TARGET_OS_IPHONE
 
-+ (Class)configClass {
-    static dispatch_once_t onceToken;
-    static Class configClass = NULL;
-    dispatch_once(&onceToken,^{
-        NSString *rawName = @"LookinConfig";
-        
-        configClass = NSClassFromString(rawName);
-        if (!configClass) {
-            int numberOfClasses = objc_getClassList(NULL, 0);
-            if (numberOfClasses > 0) {
-                Class *classes = (__unsafe_unretained Class *)malloc(sizeof(Class) * numberOfClasses);
-                numberOfClasses = objc_getClassList(classes, numberOfClasses);
-                for (int i = 0; i < numberOfClasses; i++) {
-                    Class class = classes[i];
-                    if ([NSStringFromClass(class) hasSuffix:@"LookinConfig"]) {
-                        configClass = class;
-                        break;
-                    }
-                }
-                free(classes);
-            }
-        }
-    });
-    return configClass;
-}
-
-+ (instancetype)staticInfo {
++ (instancetype)staticInfoWithLookinVersion:(NSString *)version {
+    BOOL readCustomInfo = NO;
+    // Client 1.0.4 开始支持 customInfo
+    if (version && [version lookin_numbericOSVersion] >= 10004) {
+        readCustomInfo = YES;
+    }
+    
+    [[LKS_CustomAttrSetterManager sharedInstance] removeAll];
+    
     LookinHierarchyInfo *info = [LookinHierarchyInfo new];
     info.serverVersion = LOOKIN_SERVER_VERSION;
-    info.displayItems = [LKS_HierarchyDisplayItemsMaker itemsWithScreenshots:NO attrList:NO lowImageQuality:NO includedWindows:nil excludedWindows:nil];
+    info.displayItems = [LKS_HierarchyDisplayItemsMaker itemsWithScreenshots:NO attrList:NO lowImageQuality:NO readCustomInfo:readCustomInfo saveCustomSetter:YES];
     info.appInfo = [LookinAppInfo currentInfoWithScreenshot:NO icon:YES localIdentifiers:nil];
-    info.collapsedClassList = [self collapsedClassList];
-    info.colorAlias = [self colorAlias];
-    info.serverSetupType = LOOKIN_SERVER_SETUP_TYPE;
+    info.collapsedClassList = [LKSConfigManager collapsedClassList];
+    info.colorAlias = [LKSConfigManager colorAlias];
     return info;
 }
 
 + (instancetype)exportedInfo {
     LookinHierarchyInfo *info = [LookinHierarchyInfo new];
     info.serverVersion = LOOKIN_SERVER_VERSION;
-    info.displayItems = [LKS_HierarchyDisplayItemsMaker itemsWithScreenshots:YES attrList:YES lowImageQuality:YES includedWindows:nil excludedWindows:nil];
+    info.displayItems = [LKS_HierarchyDisplayItemsMaker itemsWithScreenshots:YES attrList:YES lowImageQuality:YES readCustomInfo:YES saveCustomSetter:NO];
     info.appInfo = [LookinAppInfo currentInfoWithScreenshot:NO icon:YES localIdentifiers:nil];
-    info.collapsedClassList = [self collapsedClassList];
-    info.colorAlias = [self colorAlias];
-    info.serverSetupType = LOOKIN_SERVER_SETUP_TYPE;
+    info.collapsedClassList = [LKSConfigManager collapsedClassList];
+    info.colorAlias = [LKSConfigManager colorAlias];
     return info;
-}
-
-+ (instancetype)perspectiveInfoWithIncludedWindows:(NSArray<UIWindow *> *)includedWindows excludedWindows:(NSArray<UIWindow *> *)excludedWindows {
-    LookinHierarchyInfo *info = [LookinHierarchyInfo new];
-    info.serverVersion = LOOKIN_SERVER_VERSION;
-    info.displayItems = [LKS_HierarchyDisplayItemsMaker itemsWithScreenshots:YES attrList:YES lowImageQuality:NO includedWindows:includedWindows excludedWindows:excludedWindows];
-    info.appInfo = [LookinAppInfo currentInfoWithScreenshot:NO icon:YES localIdentifiers:nil];
-    info.collapsedClassList = [self collapsedClassList];
-    info.colorAlias = [self colorAlias];
-    info.serverSetupType = LOOKIN_SERVER_SETUP_TYPE;
-    return info;
-}
-
-+ (NSArray<NSString *> *)collapsedClassList {
-    Class configClass = [self configClass];
-    if (!configClass) {
-        return nil;
-    }
-    SEL selector = NSSelectorFromString(@"collapsedClasses");
-    if (![configClass respondsToSelector:selector]) {
-        return nil;
-    }
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[configClass methodSignatureForSelector:selector]];
-    [invocation setTarget:configClass];
-    [invocation setSelector:selector];
-    [invocation invoke];
-    void *arrayValue;
-    [invocation getReturnValue:&arrayValue];
-    id classList = (__bridge id)(arrayValue);
-    
-    if ([classList isKindOfClass:[NSArray class]]) {
-        NSArray *validClassList = [((NSArray *)classList) lookin_filter:^BOOL(id obj) {
-            return [obj isKindOfClass:[NSString class]];
-        }];
-        return [validClassList copy];
-    }
-    return nil;
-}
-
-+ (NSDictionary<NSString *, UIColor *> *)colorAlias {
-    Class configClass = [self configClass];
-    if (!configClass) {
-        return nil;
-    }
-    SEL selector = NSSelectorFromString(@"colors");
-    if (![configClass respondsToSelector:selector]) {
-        return nil;
-    }
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[configClass methodSignatureForSelector:selector]];
-    [invocation setTarget:configClass];
-    [invocation setSelector:selector];
-    [invocation invoke];
-    void *dictValue;
-    [invocation getReturnValue:&dictValue];
-    id colorAlias = (__bridge id)(dictValue);
-    
-    if ([colorAlias isKindOfClass:[NSDictionary class]]) {
-        NSMutableDictionary *validDictionary = [NSMutableDictionary dictionary];
-        [(NSDictionary *)colorAlias enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if ([key isKindOfClass:[NSString class]]) {
-                if ([obj isKindOfClass:[UIColor class]]) {
-                    [validDictionary setObject:obj forKey:key];
-                    
-                } else if ([obj isKindOfClass:[NSDictionary class]]) {
-                    __block BOOL isValidSubDict = YES;
-                    [((NSDictionary *)obj) enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull subKey, id  _Nonnull subObj, BOOL * _Nonnull stop) {
-                        if (![subKey isKindOfClass:[NSString class]] || ![subObj isKindOfClass:[UIColor class]]) {
-                            isValidSubDict = NO;
-                            *stop = YES;
-                        }
-                    }];
-                    if (isValidSubDict) {
-                        [validDictionary setObject:obj forKey:key];
-                    }
-                }
-            }
-        }];
-        return [validDictionary copy];
-    }
-    return nil;
 }
 
 #endif
@@ -167,7 +69,6 @@ static NSString * const LookinHierarchyInfoCodingKey_CollapsedClassList = @"4";
     [aCoder encodeObject:self.collapsedClassList forKey:LookinHierarchyInfoCodingKey_CollapsedClassList];
     [aCoder encodeObject:self.appInfo forKey:LookinHierarchyInfoCodingKey_AppInfo];
     [aCoder encodeInt:self.serverVersion forKey:@"serverVersion"];
-    [aCoder encodeInt:self.serverSetupType forKey:@"serverSetupType"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -177,7 +78,6 @@ static NSString * const LookinHierarchyInfoCodingKey_CollapsedClassList = @"4";
         self.collapsedClassList = [aDecoder decodeObjectForKey:LookinHierarchyInfoCodingKey_CollapsedClassList];
         self.appInfo = [aDecoder decodeObjectForKey:LookinHierarchyInfoCodingKey_AppInfo];
         self.serverVersion = [aDecoder decodeIntForKey:@"serverVersion"];
-        self.serverSetupType = [aDecoder decodeIntForKey:@"serverSetupType"];
     }
     return self;
 }
@@ -194,7 +94,6 @@ static NSString * const LookinHierarchyInfoCodingKey_CollapsedClassList = @"4";
     newAppInfo.appInfo = self.appInfo.copy;
     newAppInfo.collapsedClassList = self.collapsedClassList;
     newAppInfo.colorAlias = self.colorAlias;
-    newAppInfo.serverSetupType = self.serverSetupType;
     newAppInfo.displayItems = [self.displayItems lookin_map:^id(NSUInteger idx, LookinDisplayItem *oldItem) {
         return oldItem.copy;
     }];

@@ -130,6 +130,7 @@
             [button setEnabled:item.isEnabled];
             [button setTitle:item.title];
             [button setImage:item.image];
+            [button setTintColor:item.tintColor];
             [button addTarget:self action:@selector(_handleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             objc_setAssociatedObject(button, "_bar_item", item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             item.button = button;
@@ -167,6 +168,7 @@
             [button setEnabled:item.isEnabled];
             [button setTitle:item.title];
             [button setImage:item.image];
+            [button setTintColor:item.tintColor];
             [button addTarget:self action:@selector(_handleButtonClick:) forControlEvents:UIControlEventTouchUpInside];
             objc_setAssociatedObject(button, "_bar_item", item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             item.button = button;
